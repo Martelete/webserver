@@ -3,14 +3,14 @@ resource "aws_lb" "web-server-alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_sg.id]
-  subnets            = [data.aws_subnet.subnet_id.id]
+  subnets            = [data.aws_subnet.subnet_id_a.id, data.aws_subnet.subnet_id_b.id]
   tags               = local.tags
 
-  access_logs {
-    bucket  = aws_s3_bucket.web_server_s3_alb_logs.bucket
-    prefix  = "alb-logs"
-    enabled = true
-  }
+  # access_logs {
+  #   bucket  = aws_s3_bucket.web_server_s3_alb_logs.bucket
+  #   prefix  = "alb-logs"
+  #   enabled = true
+  # }
 }
 
 resource "aws_lb_listener" "public_facing" {

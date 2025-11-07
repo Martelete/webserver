@@ -1,4 +1,4 @@
-resource "aws_launch_configuration" "web_server_lc" {
+resource "aws_launch_template" "web_server_lc" {
   name                 = "web_server_httpd"
   image_id             = var.ami_id
   instance_type        = "t2.micro"
@@ -17,8 +17,26 @@ resource "aws_autoscaling_group" "web_server" {
   health_check_type         = "ELB"
   desired_capacity          = 1
   force_delete              = true
-  launch_configuration      = aws_launch_configuration.web_server_lc.name
-  # vpc_zone_identifier       = [data.aws_subnet.subnet_id_a.id, data.aws_subnet.subnet_id_b.id, data.aws_subnet.subnet_id_c.id] 
+
+  launch_template {
+    id      = aws_launch_template.web_server_lc.id
+    version = "$Latest"
+  }
+  
+  target_group_arns = [
+    aws_lb_target_group.web_server_tg.arn
+  ]
+  
   vpc_zone_identifier       = sort(data.aws_subnet.subnet_id.*.id)
-  tags                      = local.asg
+  tag {
+    key                 = "Name"
+    value               = "web-server"
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "Environment"
+    value               = "dev"
+    propagate_at_launch = true
+  }               
 }
