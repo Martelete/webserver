@@ -24,8 +24,8 @@ resource "aws_security_group" "alb_sg" {
   name   = "web-server-alb-sg"
 
   ingress {
-    from_port   = 443
-    to_port     = 443
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     description = "allow HTTP"
     cidr_blocks = ["0.0.0.0/0"]

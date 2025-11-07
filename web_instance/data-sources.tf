@@ -1,7 +1,7 @@
 data "aws_vpc" "vpc_id" {
   filter {
     name   = "tag:Name"
-    values = ["default_vpc"]
+    values = ["default"]
   }
 }
 
